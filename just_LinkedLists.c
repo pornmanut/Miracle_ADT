@@ -27,7 +27,7 @@ NODE* prepend(NODE* head,int data){
 	return head;
 
 }
-/*InsetAfter*/
+/*InsetLast*/
 NODE* append(NODE * head,int data){
 
 	NODE* cursor = head;
@@ -39,8 +39,32 @@ NODE* append(NODE * head,int data){
 	cursor->next = node;
 	return head;
 }
+/*SerachInfo*/
+NODE* search(NODE *head,int data){
+	
+	NODE* cursor = head;
+	while(cursor != NULL){
+		if(cursor->data == data)return cursor;	
+		cursor = cursor->next;
+	}
+}
 
+/*InsertAfter*/
+NODE* insertAfter(NODE *head,int data,NODE* prev){
+	
+	if(head == NULL || prev == NULL) return NULL;
 
+	NODE* cursor = head;
+	while(cursor != prev){
+		cursor = cursor->next;
+	}
+	if(cursor = NULL) return NULL;	
+
+	NODE* node = create(data,prev->next);
+	prev->next = node;
+	
+	return node;
+}
 
 /*PrintInfo*/
 void printInfo(NODE* head){
@@ -55,13 +79,17 @@ void printInfo(NODE* head){
 	}
 	printf("Count: %d\n",count);
 }
+/*Main*/
 int main(){
 	
 	NODE* start = NULL;
 	start = prepend(start,5);
 	start = prepend(start,6);
-	append(start,13);
+	append(start,15);
 	append(start,10);
+	
+	insertAfter(start,20, search(start,5) );
+	
 	printInfo(start);
 	return 0;
 }
