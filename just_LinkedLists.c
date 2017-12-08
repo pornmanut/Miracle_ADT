@@ -48,7 +48,30 @@ NODE* search(NODE *head,int data){
 		cursor = cursor->next;
 	}
 }
+/*InsertBefore*/
+NODE* insertBefore(NODE* head,int data,NODE* nxt){
+	if(head == NULL || nxt == NULL) return NULL;
 
+	if(head == nxt)
+	{
+		head = prepend(head,data);
+		return head;
+	}
+
+	NODE* cursor = head;
+	while(cursor != NULL){
+		if(cursor->next == nxt) break;
+		cursor = cursor->next;
+	}
+	
+	if(cursor == NULL) return NULL;
+	
+	NODE* node = create(data,cursor->next);
+	cursor->next = node;
+	
+	return node;
+	
+}
 /*InsertAfter*/
 NODE* insertAfter(NODE *head,int data,NODE* prev){
 	
@@ -58,14 +81,52 @@ NODE* insertAfter(NODE *head,int data,NODE* prev){
 	while(cursor != prev){
 		cursor = cursor->next;
 	}
-	if(cursor = NULL) return NULL;	
+	if(cursor == NULL) return NULL;	
 
 	NODE* node = create(data,prev->next);
 	prev->next = node;
 	
 	return node;
+
+}
+/*FreeNode*/
+
+void freeNode(NODE* node){
+	free(node);
 }
 
+/*DeleteFirst*/
+NODE* removeFront(NODE* head){
+	if(head == NULL)return NULL;
+
+	NODE* front = head;
+	head = head->next;
+
+	front->next = NULL;
+
+	freeNode(front);
+	return head;
+
+}
+
+/*DeleteAfter*/
+NODE* removeLast(NODE* head){
+	if(head == NULL)return NULL;
+
+	NODE* cursor = head;
+	NODE* back = NULL;
+
+	while(cursor-> next != NULL){
+		back = cursor;
+		cursor = cursor->next;
+	}
+	if(back != NULL)back->next = NULL;
+	if(cursor == head) head = NULL;
+
+	freeNode(cursor);
+
+	return head;
+}
 /*PrintInfo*/
 void printInfo(NODE* head){
 	
@@ -73,11 +134,11 @@ void printInfo(NODE* head){
 	int count = 0;
 	while(cursor != NULL){
 		printf("%2.d: %3.d ",count+1,cursor->data);
-		if((count+1)%2 == 0)printf("\n");
+		if((count+1)%5 == 0)printf("\n");
 		count++;
 		cursor = cursor->next;
 	}
-	printf("Count: %d\n",count);
+	printf("Count: %d\n\n",count);
 }
 /*Main*/
 int main(){
@@ -89,7 +150,13 @@ int main(){
 	append(start,10);
 	
 	insertAfter(start,20, search(start,5) );
-	
+	insertBefore(start,100, search(start,20));	
+	printInfo(start);
+
+	start = removeFront(start);
+	printInfo(start);
+	start = removeLast(start);
+	start = removeLast(start);
 	printInfo(start);
 	return 0;
 }
